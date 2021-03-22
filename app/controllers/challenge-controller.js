@@ -27,6 +27,11 @@ module.exports.controllerInsertChallenge = function (req, res, next) {
     var aConnectionSteps = new ConnectionSteps();
     aConnectionSteps.controllerSteps(req, res, next, function (connection, callback) {
         let aChallenge = new Challenge();
+        if(req.body.startDate > req.body.endDate){
+            let err = new Error();
+            err.message = "EndDate must be after StartDate !!!";
+            callback(err);
+        }else{
         aChallenge.name = req.body.name;
         aChallenge.visibilityType = req.body.visibilityType;
         aChallenge.description = req.body.description;
@@ -40,6 +45,7 @@ module.exports.controllerInsertChallenge = function (req, res, next) {
         aChallenge.insertChallenge(connection, aChallenge, function (err, aChallenge) {
             callback(err, aChallenge);
         });
+    }
     });
 };
 
@@ -47,20 +53,27 @@ module.exports.controllerUpdateChallenge = function (req, res, next) {
     var aConnectionSteps = new ConnectionSteps();
     aConnectionSteps.controllerSteps(req, res, next, function (connection, callback) {
         let aChallenge = new Challenge();
-        aChallenge.id = req.body.id;
-        aChallenge.name = req.body.name;
-        aChallenge.visibilityType = req.body.visibilityType;
-        aChallenge.description = req.body.description;
-        aChallenge.tags = req.body.tags;
-        aChallenge.location = req.body.location;
-        aChallenge.startDate = req.body.startDate;
-        aChallenge.endDate = req.body.endDate;
-        aChallenge.image = req.body.image;
-        aChallenge.isActive = req.body.isActive;
-        aChallenge.userId = req.body.userId;
-        aChallenge.updateChallenge(connection, aChallenge, function (err, aChallenge) {
-            callback(err, aChallenge);
-        });
+        if(req.body.startDate > req.body.endDate){
+            let err = new Error();
+            err.message = "EndDate must be after StartDate !!!";
+            callback(err);
+        }else{
+            aChallenge.id = req.body.id;
+            aChallenge.name = req.body.name;
+            aChallenge.visibilityType = req.body.visibilityType;
+            aChallenge.description = req.body.description;
+            aChallenge.tags = req.body.tags;
+            aChallenge.location = req.body.location;
+            aChallenge.startDate = req.body.startDate;
+            aChallenge.endDate = req.body.endDate;
+            aChallenge.image = req.body.image;
+            aChallenge.isActive = req.body.isActive;
+            aChallenge.userId = req.body.userId;
+            aChallenge.updateChallenge(connection, aChallenge, function (err, aChallenge) {
+                callback(err, aChallenge);
+            });
+        }
+        
     });
 };
 

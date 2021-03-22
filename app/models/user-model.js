@@ -267,6 +267,12 @@ User.prototype.updateUser = function (gConnection, user, finalCallback) {
 User.prototype.deleteUser = function (gConnection, userID, finalCallback) {
     async.waterfall([
         function (callback) {
+            let aCRUD = new CRUD();
+            aCRUD.deleteAllRecordsRelatedToUser(gConnection, constants.challengeTableName, userID, function (err) {
+                callback(err);
+            });
+        },
+        function (callback) {
             let aUser = new User();
             aUser.getUserById(gConnection, userID, function (err, aUser) {
                 callback(err, aUser);
